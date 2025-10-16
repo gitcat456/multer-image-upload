@@ -30,11 +30,6 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 // API routes
 app.use('/api', uploadRoutes);
 
-// Root route - Basic welcome message
-app.get('/', (req, res) => {
-   res.sendFile(path.join(__dirname, 'public', 'index.html'));
-});
-
 // 404 handler for undefined routes
 app.use((req, res) => {
   res.status(404).json({
@@ -49,6 +44,7 @@ app.use((error, req, res, next) => {
   
   // Handle multer errors (file too large, etc.)
   if (error instanceof multer.MulterError) {
+
     if (error.code === 'LIMIT_FILE_SIZE') {
       return res.status(400).json({
         success: false,
