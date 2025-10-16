@@ -1,4 +1,7 @@
-// Controller to handle image upload logic
+const fs = require('fs');
+const path = require('path');
+
+
 exports.uploadImage = (req, res) => {
   try {
     // Check if file was uploaded
@@ -63,6 +66,37 @@ exports.uploadMultipleImages = (req, res) => {
       success: false,
       message: 'Server error during files upload',
       error: error.message
+    });
+  }
+};
+
+
+exports.getAllImages = (req, res) => {
+  try {
+    const uploadsDir = path.join(__dirname, 'uploads');
+
+    fs.readdir(uploadsDir, (err, files) => {
+      if (err) {
+        console.error('Error reading upload directory:', err);
+        return res.status(500).json({
+          success: false,
+          message: 'Unable to read upload directory',
+          error: err.message,
+        });
+      }
+
+      res.status(200).json({
+        success: true,
+        files: files,  
+      });
+    });
+    
+  } catch (error) {
+    console.error('Error fetching files:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Internal Server error',
+      error: error.message,
     });
   }
 };
