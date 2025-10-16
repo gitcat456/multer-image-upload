@@ -20,6 +20,9 @@ app.use(cors());
 app.use(express.json()); 
 app.use(express.urlencoded({ extended: true })); 
 
+//serve static html page
+app.use(express.static(path.join(__dirname, 'public')));
+
 // Serve static files from uploads directory
 // This allows accessing uploaded images via URL
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
@@ -29,15 +32,7 @@ app.use('/api', uploadRoutes);
 
 // Root route - Basic welcome message
 app.get('/', (req, res) => {
-  res.json({
-    message: 'Welcome to Image Upload Server API!',
-    endpoints: {
-      singleUpload: 'POST /api/upload/single',
-      multipleUpload: 'POST /api/upload/multiple',
-      healthCheck: 'GET /api/health'
-    },
-    instructions: 'Use Postman or similar tool to test upload endpoints'
-  });
+   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 // 404 handler for undefined routes
